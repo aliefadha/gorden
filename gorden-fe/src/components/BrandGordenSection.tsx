@@ -1,3 +1,17 @@
+import kaselImg from "@/assets/brosur/kasel.webp";
+import tosoImg from "@/assets/brosur/toso.webp";
+import noveImg from "@/assets/brosur/nove.webp";
+import sharpPointImg from "@/assets/brosur/sharp-point.webp";
+import shinichiImg from "@/assets/brosur/shinichi.webp";
+
+const brandImages: Record<string, string> = {
+  kasel: kaselImg,
+  toso: tosoImg,
+  nove: noveImg,
+  "sharp-point": sharpPointImg,
+  shinichi: shinichiImg,
+};
+
 export function BrandGordenSection() {
   return (
     <section className="flex flex-col max-w-7xl mx-auto w-full gap-8 py-12 lg:py-24 px-6 md:px-8">
@@ -37,7 +51,7 @@ export function BrandGordenSection() {
                 (brand) => (
                   <img
                     key={`brand${setIdx}-${brand}`}
-                    src={`/brosur/${brand}.webp`}
+                    src={brandImages[brand]}
                     alt={brand}
                     className="w-32 h-20 md:w-40 md:h-24 object-contain rounded-xl shrink-0"
                   />

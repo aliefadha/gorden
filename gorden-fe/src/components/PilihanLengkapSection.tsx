@@ -1,4 +1,8 @@
 import { useState, useRef } from "react";
+import gordenBoxImg from "@/assets/brosur/gorden-box.webp";
+import gordenSmokringImg from "@/assets/brosur/gorden-smokring.webp";
+import gordenKupuImg from "@/assets/brosur/gorden-kupu.webp";
+import gordenPoniImg from "@/assets/brosur/gorden-poni.webp";
 
 export function PilihanLengkapSection() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -29,19 +33,19 @@ export function PilihanLengkapSection() {
   const pilihanItems = [
     {
       label: "Gorden Box",
-      image: "/brosur/gorden-box.webp",
+      image: gordenBoxImg,
     },
     {
       label: "Gorden Smokring",
-      image: "/brosur/gorden-smokring.webp",
+      image: gordenSmokringImg,
     },
     {
       label: "Gorden Kupu-kupu",
-      image: "/brosur/gorden-kupu.webp",
+      image: gordenKupuImg,
     },
     {
       label: "Gorden Poni Layar",
-      image: "/brosur/gorden-poni.webp",
+      image: gordenPoniImg,
     },
   ];
 

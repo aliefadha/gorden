@@ -1,11 +1,12 @@
 import { ArrowRight } from "lucide-react";
+import ctaBrosurImg from "@/assets/brosur/cta-brosur.webp";
 
 export function CtaBannerSection() {
   return (
     <section className="relative w-full py-24 md:py-32 flex items-center justify-center bg-gray-900">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="/brosur/cta-brosur.webp"
+          src={ctaBrosurImg}
           alt="Living room with curtains"
           className="w-full h-full object-cover opacity-40"
         />

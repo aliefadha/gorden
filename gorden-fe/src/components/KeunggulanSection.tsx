@@ -7,6 +7,8 @@ import {
   Wind,
   Headset,
 } from "lucide-react";
+import keunggulan1Img from "@/assets/brosur/keunggulan1.webp";
+import keunggulan2Img from "@/assets/brosur/keunggulan2.webp";
 
 export function KeunggulanSection() {
   return (
@@ -118,7 +120,7 @@ export function KeunggulanSection() {
             {/* Images */}
             <div className="absolute top-0 translate-x-1/2 md:translate-x-1/6 lg:translate-x-1/4 left-0 w-40 h-32 md:w-52 md:h-40 lg:w-72 lg:h-58 rounded-md overflow-hidden shadow-lg transform -rotate-3 z-10">
               <img
-                src="/brosur/keunggulan1.webp"
+                src={keunggulan1Img}
                 alt="Gorden Amagriya 1"
                 className="w-full h-full object-cover"
               />
@@ -126,7 +128,7 @@ export function KeunggulanSection() {
 
             <div className="absolute bottom-0 lg:bottom-4 -translate-x-1/2 md:-translate-x-1/6  lg:-translate-x-1/4 right-4 w-40 h-32 md:w-52 md:h-40 lg:w-72 lg:h-58 rounded-md overflow-hidden shadow-lg transform rotate-2 z-20">
               <img
-                src="/brosur/keunggulan2.webp"
+                src={keunggulan2Img}
                 alt="Gorden Amagriya 2"
                 className="w-full h-full object-cover"
               />

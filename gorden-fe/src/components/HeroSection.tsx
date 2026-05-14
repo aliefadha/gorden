@@ -1,4 +1,6 @@
 import { ArrowRight } from "lucide-react";
+import arrowUpImg from "@/assets/brosur/arrow-up.png";
+import heroSectionImg from "@/assets/brosur/hero-section.png";
 
 export function HeroSection() {
   return (
@@ -58,7 +60,7 @@ export function HeroSection() {
           {/* Handwritten CTA */}
           <div className="flex items-start gap-3 mb-10 px-10">
             <img
-              src="/brosur/arrow-up.png"
+              src={arrowUpImg}
               className="w-10 h-10 text-[#EB216A] flex-shrink-0 "
             />
             <p
@@ -94,7 +96,7 @@ export function HeroSection() {
             ))}
           </div>
         </div>
-        <img src="/brosur/hero-section.png" alt="hero" className="bg-white" />
+        <img src={heroSectionImg} alt="hero" className="bg-white" />
       </div>
       <div className="py-24 px-4 md:px-8 lg:px-0 max-w-xs md:max-w-7xl mx-auto">
         <h2 className="text-xl text-left lg:text-center ">

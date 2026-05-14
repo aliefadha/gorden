@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { MoveHorizontal } from "lucide-react";
+import problem2Img from "@/assets/brosur/problem2.webp";
+import problem1Img from "@/assets/brosur/problem1.webp";
+import earthImg from "@/assets/brosur/earth.png";
+import rulerImg from "@/assets/brosur/ruler.png";
+import eyeImg from "@/assets/brosur/eye.png";
+import homeImg from "@/assets/brosur/home.png";
 
 export function ProblemSection() {
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -10,7 +16,7 @@ export function ProblemSection() {
         {/* Before Image (bottom/right) */}
         <div className="absolute inset-0 w-full h-full">
           <img
-            src="/brosur/problem2.webp"
+            src={problem2Img}
             className="w-full h-full object-cover"
             alt="Gorden Lama"
           />
@@ -22,7 +28,7 @@ export function ProblemSection() {
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
           <img
-            src="/brosur/problem1.webp"
+            src={problem1Img}
             className="w-full h-full object-cover"
             alt="Gorden Baru"
           />
@@ -62,7 +68,7 @@ export function ProblemSection() {
         <div className="flex flex-col gap-y-6">
           <div className="flex gap-4 items-center">
             <img
-              src="/brosur/earth.png"
+              src={earthImg}
               className="w-8 h-8 object-contain"
               alt="Earth"
             />
@@ -72,7 +78,7 @@ export function ProblemSection() {
           </div>
           <div className="flex gap-4 items-center">
             <img
-              src="/brosur/ruler.png"
+              src={rulerImg}
               className="w-8 h-8 object-contain"
               alt="Ruler"
             />
@@ -82,7 +88,7 @@ export function ProblemSection() {
           </div>
           <div className="flex gap-4 items-center">
             <img
-              src="/brosur/eye.png"
+              src={eyeImg}
               className="w-8 h-8 object-contain"
               alt="Eye"
             />
@@ -92,7 +98,7 @@ export function ProblemSection() {
           </div>
           <div className="flex gap-4 items-center">
             <img
-              src="/brosur/home.png"
+              src={homeImg}
               className="w-8 h-8 object-contain"
               alt="Home"
             />
