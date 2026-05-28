@@ -1,115 +1,265 @@
-import { useState, useRef } from "react";
-import gordenBoxImg from "@/assets/brosur/gorden-box.webp";
-import gordenSmokringImg from "@/assets/brosur/gorden-smokring.webp";
-import gordenKupuImg from "@/assets/brosur/gorden-kupu.webp";
-import gordenPoniImg from "@/assets/brosur/gorden-poni.webp";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import img1 from "@/assets/brosur/pilihan1.jpg";
+import img2 from "@/assets/brosur/pilihan2.jpg";
+import img3 from "@/assets/brosur/pilihan3.jpg";
+import img4 from "@/assets/brosur/pilihan4.jpg";
+import img5 from "@/assets/brosur/pilihan5.jpg";
 
-export function PilihanLengkapSection() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const sliderRef = useRef<HTMLDivElement>(null);
+// Product data based on Figma design
+const products = [
+  {
+    id: "sp100b",
+    code: "SP.100 B",
+    name: "Blackout Fabric",
+    category: "Gorden",
+    image: img1,
+    swatchColors: [
+      "#6A9BBB",
+      "#BED1CB",
+      "#BAAB96",
+      "#664728",
+      "#C3C7C6",
+      "#050505",
+    ],
+  },
+  {
+    id: "sp111",
+    code: "SP.111",
+    name: "Dim Out",
+    category: "Gorden",
+    image: img2,
+    swatchColors: ["#3E231A", "#879185", "#EBE8D5"],
+  },
+  {
+    id: "spvw8",
+    code: "SP.VW8",
+    name: "Solar Screen",
+    category: "Gorden",
+    image: img3,
+    swatchColors: ["#705937", "#211009", "#927D52", "#4A391B"],
+  },
+  {
+    id: "lavender",
+    code: "LAV.01",
+    name: "Art Creation",
+    category: "Gorden",
+    image: img4,
+    swatchColors: ["#A18E70", "#B2AD90", "#8F9591", "#5D635F"],
+  },
+  {
+    id: "bmw",
+    code: "BMW.320",
+    name: "Extra Wide:320CM",
+    category: "Gorden",
+    image: img5,
+    swatchColors: ["#656567"],
+  },
+];
 
-  const handleScroll = () => {
-    if (sliderRef.current) {
-      const scrollLeft = sliderRef.current.scrollLeft;
-      // We assume all cards are the same width and the gap is 24px (gap-6)
-      const cardWidth = sliderRef.current.children[0].clientWidth + 24;
-      const index = Math.round(scrollLeft / cardWidth);
-      if (index !== activeSlide) {
-        setActiveSlide(index);
-      }
-    }
-  };
+const jenisTabs = ["Semua", "Gorden", "Blind"];
+const kategoriOptions = ["Semua Kategori", "Polyester"];
+const fungsiOptions = ["Semua Fungsi"];
 
-  const scrollToSlide = (index: number) => {
-    if (sliderRef.current) {
-      const cardWidth = sliderRef.current.children[0].clientWidth + 24;
-      sliderRef.current.scrollTo({
-        left: index * cardWidth,
-        behavior: "smooth",
-      });
-      setActiveSlide(index);
-    }
-  };
-  const pilihanItems = [
-    {
-      label: "Gorden Box",
-      image: gordenBoxImg,
-    },
-    {
-      label: "Gorden Smokring",
-      image: gordenSmokringImg,
-    },
-    {
-      label: "Gorden Kupu-kupu",
-      image: gordenKupuImg,
-    },
-    {
-      label: "Gorden Poni Layar",
-      image: gordenPoniImg,
-    },
-  ];
-
+// Product Card
+function ProductCard({ product }: { product: (typeof products)[0] }) {
   return (
-    <section className="flex flex-col max-w-7xl mx-auto w-full gap-4 py-12 lg:py-24 px-6 md:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col items-center text-center px-4 mb-0 lg:mb-14">
-        <p className="text-[#EB216A] text-lg mb-2">Pilihan Lengkap</p>
-        <h2 className="text-2xl lg:text-4xl text-[#2E2E2E] font-regular leading-tight max-w-2xl">
-          <span className="font-semibold">Tersedia Beragam Pilihan </span>
-          <br className="hidden lg:inline" /> Bahan Gorden dan Blind
-        </h2>
+    <div
+      className="bg-white rounded-2xl transition-shadow duration-200 p-3
+      flex flex-row gap-4
+      lg:flex-col lg:gap-3
+    "
+    >
+      {/* Image with pink border */}
+      <div
+        className="rounded-xl overflow-hidden flex-shrink-0 w-[150px] lg:h-[200px] lg:w-full lg:h-auto"
+        style={{ border: "1px solid #EB216A" }}
+      >
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-[150px] lg:h-[200px] object-cover"
+        />
       </div>
 
-      {/* Slider Container */}
-      <div className="max-w-7xl mx-auto w-full relative">
-        <div
-          ref={sliderRef}
-          onScroll={handleScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-4 md:px-8 hide-scrollbar"
-        >
-          {pilihanItems.map((item) => (
+      {/* Right side: swatches + info */}
+      <div className="flex flex-col justify-center gap-2 lg:gap-3 min-w-0">
+        {/* Color swatches */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {product.swatchColors.map((color, i) => (
             <div
-              key={item.label}
-              className="bg-white p-2  rounded-[2rem] flex flex-col gap-3 md:gap-4 min-w-[240px] w-[240px] lg:min-w-[320px] lg:w-[320px] snap-center flex-shrink-0 mx-auto md:mx-0"
-            >
-              <div className="bg-[#EB216A] text-white text-center py-2 rounded-xl  font-medium text-xs md:text-base">
-                {item.label}
-              </div>
-              <div className="rounded-xl overflow-hidden bg-gray-100 h-[240px] lg:h-[380px]">
-                <img
-                  src={item.image}
-                  alt={item.label}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="flex justify-center items-center gap-3 mt-6">
-          {pilihanItems.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToSlide(index)}
-              className={`rounded-full transition-all duration-300 ${
-                activeSlide === index
-                  ? "w-8 h-3.5 bg-[#EB216A]"
-                  : "w-3.5 h-3.5 bg-[#E5E5E5] hover:bg-gray-300"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
+              key={i}
+              className="w-5 h-5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: color, boxShadow: "0 0 0 1px #e0e0e0" }}
             />
           ))}
         </div>
 
-        <style>{`
-            .hide-scrollbar::-webkit-scrollbar {
-              display: none;
-            }
-            .hide-scrollbar {
-              -ms-overflow-style: none;
-              scrollbar-width: none;
-            }
-          `}</style>
+        {/* Card info */}
+        <div className="flex flex-col gap-0.5">
+          <p className="text-sm lg:text-lg font-bold text-[#2E2E2E]">
+            {product.code}
+          </p>
+          <h3 className="text-sm lg:text-lg font-bold text-[#2E2E2E] leading-tight">
+            {product.name}
+          </h3>
+          <p className="text-sm text-gray-400">{product.category}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function PilihanLengkapSection() {
+  const [activeJenis, setActiveJenis] = useState("Semua");
+  const [activeKategori, setActiveKategori] = useState("Semua Kategori");
+  const [activeFungsi, setActiveFungsi] = useState("Semua Fungsi");
+
+  return (
+    <section className="flex flex-col max-w-7xl mx-auto w-full gap-6 py-12 lg:py-24 px-6 md:px-8">
+      {/* Header */}
+      <div className="flex flex-col items-center text-center gap-2 mb-2">
+        <p className="text-[#EB216A] text-base font-medium">Pilihan Lengkap</p>
+        <h2 className="text-2xl lg:text-4xl text-[#2E2E2E] leading-tight max-w-2xl">
+          <span className="font-semibold">Tersedia Beragam Pilihan </span>
+          Bahan Gorden dan Blind
+        </h2>
+      </div>
+
+      {/* Filter Bar */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between w-full">
+        {/* Mobile: full-width Pilih Bahan dropdown — hidden on desktop */}
+        <div className="relative lg:hidden">
+          <select
+            value={activeKategori}
+            onChange={(e) => setActiveKategori(e.target.value)}
+            className="appearance-none w-full bg-white border border-[#E0E0E0] rounded-full px-5 py-3 pr-10 text-[#2E2E2E] cursor-pointer focus:outline-none focus:border-[#EB216A] transition-colors"
+          >
+            {kategoriOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+          <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+            ⌄
+          </span>
+        </div>
+
+        {/* Mobile: Jenis label + pills stacked — hidden on desktop */}
+        <div className="flex flex-col gap-2 lg:hidden">
+          <span className="font-semibold text-[#2E2E2E]">Jenis:</span>
+          <div className="flex items-center gap-2">
+            {jenisTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveJenis(tab)}
+                className={`text-sm px-4 py-1.5 rounded-full font-medium border transition-all duration-200 ${
+                  activeJenis === tab
+                    ? "bg-[#EB216A] text-white border-[#EB216A]"
+                    : "bg-white text-gray-500 border-[#E0E0E0]"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Pilih Bahan dropdown */}
+        <div className="hidden lg:flex items-center gap-2">
+          <span className="text-gray-500 whitespace-nowrap">Pilih Bahan:</span>
+          <div className="relative">
+            <select
+              value={activeKategori}
+              onChange={(e) => setActiveKategori(e.target.value)}
+              className="appearance-none bg-white border border-[#E0E0E0] rounded-full px-4 py-1.5 pr-8 text-[#2E2E2E] cursor-pointer focus:outline-none focus:border-[#EB216A] transition-colors"
+            >
+              {kategoriOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
+              ▾
+            </span>
+          </div>
+        </div>
+
+        {/* Desktop: Jenis pills inline */}
+        <div className="hidden lg:flex items-center gap-2">
+          <span className="text-gray-500 whitespace-nowrap">Jenis:</span>
+          <div className="flex items-center gap-2">
+            {jenisTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveJenis(tab)}
+                className={`px-4 py-1.5 rounded-full font-medium border transition-all duration-200 ${
+                  activeJenis === tab
+                    ? "bg-[#EB216A] text-white border-[#EB216A]"
+                    : "bg-white text-gray-500 border-[#E0E0E0] hover:border-[#EB216A] hover:text-[#EB216A]"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Fungsi dropdown */}
+        <div className="hidden lg:flex items-center gap-2">
+          <span className="text-gray-500 whitespace-nowrap">Fungsi:</span>
+          <div className="relative">
+            <select
+              value={activeFungsi}
+              onChange={(e) => setActiveFungsi(e.target.value)}
+              className="appearance-none bg-white border border-[#E0E0E0] rounded-full px-4 py-1.5 pr-8 text-[#2E2E2E] cursor-pointer focus:outline-none focus:border-[#EB216A] transition-colors"
+            >
+              {fungsiOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
+              ▾
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      {/* CTA Button */}
+      <div className="flex justify-center mt-2">
+        <Link
+          to="/products"
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+              "#EB216A";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+              "transparent";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#EB216A";
+          }}
+          style={{
+            color: "#EB216A",
+            backgroundColor: "transparent",
+            transition: "all 0.2s",
+          }}
+          className="flex items-center gap-2 border border-[#EB216A] rounded-full px-8 py-2.5 text-sm font-medium"
+        >
+          Lihat semua bahan
+          <span>→</span>
+        </Link>
       </div>
     </section>
   );

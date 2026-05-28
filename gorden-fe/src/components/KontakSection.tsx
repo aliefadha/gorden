@@ -18,13 +18,6 @@ export function KontakSection() {
         </p>
         <div className="flex items-center gap-4">
           <a
-            href="https://www.facebook.com/amagriyacom"
-            aria-label="Facebook"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-[#EB216A] text-white flex items-center justify-center hover:bg-[#d11d5e] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
-          >
-            <Facebook className="w-5 h-5 md:w-6 md:h-6 fill-current" />
-          </a>
-          <a
             href="https://www.instagram.com/amagriyacom"
             aria-label="Instagram"
             className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-[#EB216A] text-white flex items-center justify-center hover:bg-[#d11d5e] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"

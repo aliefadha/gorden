@@ -30,13 +30,13 @@ export default function BrosurPage() {
 
       <BrandGordenSection />
 
-      <PilihanLengkapSection />
-
-      <KontakSection />
-
       <ModelGordenSection />
 
       <ModelBlindsSection />
+
+      <PilihanLengkapSection />
+
+      <KontakSection />
 
       <GaleriSection />
 

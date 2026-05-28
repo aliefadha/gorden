@@ -182,29 +182,7 @@ export function HeroSection() {
       </div>
       <div className="w-full bg-[#EB216A] py-4">
         <div className="flex mx-auto justify-center gap-0">
-          <div className="flex items-center gap-1.5 text-white px-5 border-l border-white first:border-l-0">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M4.65745 22.5029C3.81895 22.5029 3.02245 22.17 2.42245 21.5774C1.82245 20.9849 1.49695 20.1809 1.49695 19.3424V4.65745C1.49695 3.81895 1.82995 3.02245 2.42245 2.42245C3.01495 1.82245 3.81895 1.49695 4.65745 1.49695H19.3424C20.1809 1.49695 20.9774 1.82995 21.5774 2.42245C22.1775 3.01495 22.5029 3.81895 22.5029 4.65745V19.3424C22.5029 20.1809 22.17 20.9774 21.5774 21.5774C20.9849 22.1775 20.1809 22.5029 19.3424 22.5029H4.65745ZM17.4824 13.6379H15.2624V20.9729H19.3424C19.5567 20.9735 19.769 20.9318 19.9671 20.85C20.1652 20.7683 20.3452 20.6482 20.4967 20.4967C20.6482 20.3452 20.7683 20.1652 20.85 19.9671C20.9318 19.769 20.9735 19.5567 20.9729 19.3424V4.65745C20.9731 4.44327 20.9311 4.23116 20.8492 4.03325C20.7674 3.83534 20.6473 3.65552 20.4958 3.50407C20.3444 3.35263 20.1646 3.23253 19.9666 3.15066C19.7687 3.06879 19.5566 3.02675 19.3424 3.02695H4.65745C4.22538 3.02814 3.81134 3.2003 3.50582 3.50582C3.2003 3.81134 3.02814 4.22538 3.02695 4.65745V19.3424C3.02814 19.7745 3.2003 20.1886 3.50582 20.4941C3.81134 20.7996 4.22538 20.9718 4.65745 20.9729H12.8174V13.6379H10.3724V11.1929H12.8174V9.87895C12.8174 7.38895 14.0294 6.29395 16.1024 6.29395C17.0729 6.29395 17.5949 6.36445 17.8424 6.39895L17.8574 6.40045V8.74045H16.4474C15.7364 8.74045 15.4004 9.04495 15.2984 9.65845C15.274 9.81826 15.2624 9.97978 15.2639 10.1414V11.1869H17.8289L17.4794 13.6319L17.4824 13.6379Z"
-                fill="#F9F9F9"
-              />
-            </svg>
-            <a
-              href="https://facebook.com/amagriyacom"
-              className="hidden lg:inline"
-            >
-              @amagriyacom
-            </a>
-          </div>
-          <div className="flex items-center gap-1.5 text-white px-5 border-l border-white">
+          <div className="flex items-center gap-1.5 text-white px-5  border-white">
             <svg
               width="24"
               height="24"
@@ -219,10 +197,10 @@ export function HeroSection() {
             </svg>
 
             <a
-              href="https://instagram.com/amagriyacom"
+              href="https://instagram.com/amagriya_gorden"
               className="hidden lg:inline"
             >
-              @amagriyacom
+              @amagriya_gorden
             </a>
           </div>
           <div className="flex items-center gap-1.5 text-white px-5 border-l border-white">
@@ -240,7 +218,7 @@ export function HeroSection() {
             </svg>
 
             <a href="https://wa.me/6289508965456" className="hidden lg:inline">
-              082169117517
+              0895 0896 5456
             </a>
           </div>
           <div className="flex items-center gap-1.5 text-white px-5 border-l border-white">

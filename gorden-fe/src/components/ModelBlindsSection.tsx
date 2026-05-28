@@ -119,7 +119,7 @@ export function ModelBlindsSection() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
           <div className="max-w-2xl">
-            <h2 className="text-xl md:text-2xl font-semibold text-[#2E2E2E] mb-3">
+            <h2 className="text-xl md:text-3xl font-semibold text-[#2E2E2E] mb-3">
               Model Blinds
             </h2>
             <p className="text-[#6B6B6B] text-base md:text-lg">
@@ -222,7 +222,7 @@ export function ModelBlindsSection() {
             : filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 shadow-sm border border-gray-50"
+                  className="bg-[#F5F5F5] p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 border border-gray-50"
                 >
                   <div className="bg-[#EB216A] text-white text-center py-2.5 rounded-xl font-medium text-sm md:text-base">
                     {product.name}
