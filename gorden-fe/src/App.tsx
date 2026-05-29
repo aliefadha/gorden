@@ -63,6 +63,7 @@ import { CartProvider } from "./context/CartContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import BrosurPage from "./pages/BrosurPage";
+import { FloatingInstagram } from "./components/FloatingInstagram";
 
 // Root Layout component to handle global UI and Contexts
 const RootLayout = () => {
@@ -75,6 +76,7 @@ const RootLayout = () => {
               <ConfirmProvider>
                 <ScrollToTop />
                 <CartSidebar />
+                <FloatingInstagram />
                 <FloatingWhatsApp />
                 <Toaster
                   position="top-right"

@@ -1,6 +1,6 @@
 import { ArrowRight, Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { productsApi } from "../utils/api";
+import { categoriesApi, productsApi } from "../utils/api";
 import { getProductImageUrl } from "../utils/imageHelper";
 
 interface Product {
@@ -16,6 +16,11 @@ interface Product {
   sku: string;
 }
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 export function ModelGordenSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +31,10 @@ export function ModelGordenSection() {
     min: number | null;
     max: number | null;
   }>({ min: null, max: null });
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const filteredProducts = products.filter((p) => {
     const price = Number(p.minPrice) || Number(p.price) || 0;
@@ -44,7 +53,17 @@ export function ModelGordenSection() {
     setMinPrice("");
     setMaxPrice("");
     setPriceFilter({ min: null, max: null });
+    setSearchQuery("");
+    setDebouncedSearch("");
+    setSelectedCategory(null);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -86,32 +105,49 @@ export function ModelGordenSection() {
     };
   }, []);
 
-  const fetchProducts = useCallback(async (sortValue: string) => {
-    setLoading(true);
-    try {
-      const params: any = {
-        limit: 20,
-        page: 1,
-        search: "gorden",
-      };
-      if (sortValue === "random") {
-        params.sort = "random";
-        params.seed = 18954;
-      } else {
-        params.sort = sortValue;
+  const fetchProducts = useCallback(
+    async (sortValue: string, categoryId: number | null, search: string) => {
+      setLoading(true);
+      try {
+        const params: any = { limit: 20, page: 1 };
+        if (categoryId !== null) params.category_id = categoryId;
+        if (search.trim()) params.search = search.trim();
+        if (sortValue === "random") {
+          params.sort = "random";
+          params.seed = 18954;
+        } else {
+          params.sort = sortValue;
+        }
+        const response = await productsApi.getAll(params);
+        setProducts(response.data || []);
+      } catch (error) {
+        console.error("Error fetching gorden products:", error);
+      } finally {
+        setLoading(false);
       }
-      const response = await productsApi.getAll(params);
-      setProducts(response.data || []);
-    } catch (error) {
-      console.error("Error fetching gorden products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   useEffect(() => {
-    fetchProducts(sort);
-  }, [sort, fetchProducts]);
+    fetchProducts(sort, selectedCategory, debouncedSearch);
+  }, [sort, selectedCategory, debouncedSearch, fetchProducts]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await categoriesApi.getAll();
+        const data: Category[] = response.data || response || [];
+        const gordenCategories = data.filter((c) =>
+          c.name.toLowerCase().startsWith("gorden"),
+        );
+        setCategories(gordenCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <section className="w-full py-12  max-w-7xl mx-auto gap-8 lg:py-24 px-6 md:px-8">
@@ -136,7 +172,7 @@ export function ModelGordenSection() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col lg:flex-row w-full  gap-3 md:gap-4 mb-10">
+        <div className="flex flex-col lg:flex-row w-full flex-wrap gap-3 md:gap-4 mb-10">
           <div className="flex items-center gap-2 mr-2 w-full md:w-auto">
             <div className="w-8 h-8 rounded-full bg-[#EB216A] flex items-center justify-center text-white flex-shrink-0">
               <Search className="w-4 h-4" />
@@ -144,6 +180,18 @@ export function ModelGordenSection() {
             <span className="font-semibold text-[#2E2E2E] text-sm">
               Filter Produk:
             </span>
+          </div>
+
+          {/* Search input */}
+          <div className="relative w-full md:w-56">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Cari produk..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full border border-gray-200 rounded-full pl-9 pr-4 py-2 text-sm text-[#2E2E2E] bg-white outline-none focus:border-[#EB216A]"
+            />
           </div>
 
           <select
@@ -161,6 +209,25 @@ export function ModelGordenSection() {
             <option value="price-low">Harga Terendah</option>
             <option value="price-high">Harga Tertinggi</option>
           </select>
+
+          {categories.length > 0 && (
+            <select
+              value={selectedCategory ?? ""}
+              onChange={(e) =>
+                setSelectedCategory(
+                  e.target.value === "" ? null : Number(e.target.value),
+                )
+              }
+              className="border border-gray-200 rounded-full px-4 py-2 text-sm text-[#2E2E2E] bg-white outline-none focus:border-[#EB216A] w-full md:w-auto"
+            >
+              <option value="">Semua Kategori</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          )}
 
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3 ml-0 lg:ml-4 w-full lg:w-auto">
             <span className="font-semibold text-[#2E2E2E] text-sm">Harga:</span>

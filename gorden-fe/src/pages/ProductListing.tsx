@@ -13,7 +13,7 @@ export default function ProductListing() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // All filters now come from badges database - no more hardcoded filters
   const [products, setProducts] = useState<any[]>([]);
@@ -181,21 +181,41 @@ export default function ProductListing() {
     return () => clearTimeout(timer);
   }, [selectedCategory, selectedSubcategory, selectedBadgeFilters, searchQuery, fetchProducts]);
 
+  // Helper: derive a URL-safe slug from a name when the API doesn't provide one
+  const toSlug = (name: string) =>
+    name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
   // Initialize filters from URL params
   useEffect(() => {
     if (categories.length > 0) {
-      const catIdParam = searchParams.get('categoryId');
-      const catNameParam = searchParams.get('category');
+      const catSlugParam = searchParams.get('category');
 
-      if (catIdParam) {
-        setSelectedCategory(catIdParam);
-      } else if (catNameParam) {
-        // Fallback for name-based links
-        const cat = categories.find(c => c.name.toLowerCase() === catNameParam.toLowerCase());
-        if (cat) setSelectedCategory(String(cat.id));
+      if (catSlugParam) {
+        // Match by slug field first, then fall back to name-derived slug
+        const cat = categories.find(
+          (c: any) =>
+            (c.slug && c.slug === catSlugParam) ||
+            toSlug(c.name) === catSlugParam ||
+            c.name.toLowerCase() === catSlugParam.toLowerCase()
+        );
+        if (cat) {
+          setSelectedCategory(String(cat.id));
+
+          // Also resolve subcategory slug if present
+          const subSlugParam = searchParams.get('subcategory');
+          if (subSlugParam && subcategories.length > 0) {
+            const sub = subcategories.find(
+              (s: any) =>
+                String(s.category_id) === String(cat.id) &&
+                ((s.slug && s.slug === subSlugParam) ||
+                  toSlug(s.name) === subSlugParam ||
+                  s.name.toLowerCase() === subSlugParam.toLowerCase())
+            );
+            if (sub) setSelectedSubcategory(String(sub.id));
+          }
+        }
       }
     }
-
 
     // Handle 'filter' query param - map to badge filter if badge exists with matching label
     const filterParam = searchParams.get('filter');
@@ -220,7 +240,35 @@ export default function ProductListing() {
         setSelectedBadgeFilters([matchingBadge.id]);
       }
     }
-  }, [categories, searchParams, allBadges]);
+  }, [categories, subcategories, searchParams, allBadges]);
+
+  // Sync selected category/subcategory into URL as human-readable slugs
+  const updateCategoryParams = (categoryId: string | null, subcategoryId: string | null) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      // Remove legacy ID-based params
+      next.delete('categoryId');
+      next.delete('subcategoryId');
+
+      if (categoryId) {
+        const cat = categories.find((c: any) => String(c.id) === String(categoryId));
+        const catSlug = cat ? (cat.slug || toSlug(cat.name)) : categoryId;
+        next.set('category', catSlug);
+      } else {
+        next.delete('category');
+      }
+
+      if (subcategoryId) {
+        const sub = subcategories.find((s: any) => String(s.id) === String(subcategoryId));
+        const subSlug = sub ? (sub.slug || toSlug(sub.name)) : subcategoryId;
+        next.set('subcategory', subSlug);
+      } else {
+        next.delete('subcategory');
+      }
+
+      return next;
+    });
+  };
 
   // Toggle category expansion
   const toggleCategory = (categoryId: string) => {
@@ -249,6 +297,7 @@ export default function ProductListing() {
     setSelectedCategory(null);
     setSelectedSubcategory(null);
     setSearchQuery('');
+    updateCategoryParams(null, null);
   };
 
   // Check if there are more products to load from server
@@ -282,6 +331,7 @@ export default function ProductListing() {
             onClick={() => {
               setSelectedCategory(null);
               setSelectedSubcategory(null);
+              updateCategoryParams(null, null);
               if (isMobile) setShowMobileFilters(false);
             }}
             className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all ${!selectedCategory
@@ -305,6 +355,7 @@ export default function ProductListing() {
                     onClick={() => {
                       setSelectedCategory(String(category.id));
                       setSelectedSubcategory(null);
+                      updateCategoryParams(String(category.id), null);
                       if (isMobile && catSubs.length === 0) setShowMobileFilters(false);
                     }}
                     className={`flex-1 text-left px-3 py-2.5 text-sm transition-all ${isSelected && !selectedSubcategory
@@ -333,6 +384,7 @@ export default function ProductListing() {
                         onClick={() => {
                           setSelectedCategory(String(category.id));
                           setSelectedSubcategory(String(sub.id));
+                          updateCategoryParams(String(category.id), String(sub.id));
                           if (isMobile) setShowMobileFilters(false);
                         }}
                         className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all ${String(selectedSubcategory) === String(sub.id)
@@ -407,13 +459,13 @@ export default function ProductListing() {
             {selectedCategory && (
               <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EB216A]/10 text-[#EB216A] rounded-full text-xs">
                 {categories.find(c => String(c.id) === String(selectedCategory))?.name}
-                <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedCategory(null)} />
+                <X className="w-3 h-3 cursor-pointer" onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); updateCategoryParams(null, null); }} />
               </span>
             )}
             {selectedSubcategory && (
               <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EB216A]/10 text-[#EB216A] rounded-full text-xs">
                 {subcategories.find(s => String(s.id) === String(selectedSubcategory))?.name}
-                <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedSubcategory(null)} />
+                <X className="w-3 h-3 cursor-pointer" onClick={() => { setSelectedSubcategory(null); updateCategoryParams(selectedCategory, null); }} />
               </span>
             )}
           </div>
