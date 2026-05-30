@@ -15,6 +15,12 @@ import { Footer } from "../components/Footer";
 import { KontakSection } from "../components/KontakSection";
 
 export default function BrosurPage() {
+  const params = new URLSearchParams(window.location.search);
+  const kategori = params.get("kategori");
+
+  const showGorden = kategori !== "blinds";
+  const showBlinds = kategori !== "gorden";
+
   return (
     <div
       className="min-h-screen overflow-hidden"
@@ -30,9 +36,9 @@ export default function BrosurPage() {
 
       <BrandGordenSection />
 
-      <ModelGordenSection />
+      {showGorden && <ModelGordenSection />}
 
-      <ModelBlindsSection />
+      {showBlinds && <ModelBlindsSection />}
 
       <PilihanLengkapSection />
 

@@ -86,29 +86,14 @@ export function FloatingWhatsApp() {
         <div
           style={{
             position: "fixed",
-            bottom: "32px",
+            bottom: "36px",
             left: "104px",
             zIndex: 99998,
             display: "flex",
             flexDirection: "column",
-            gap: "8px",
             animation: "slideRight 0.3s ease-out",
           }}
         >
-          {/* Option 2: Request Quote */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOptionClick(
-                "Halo admin, saya ingin membuat penawaran untuk proyek gorden saya...",
-              );
-            }}
-            className="bg-white px-4 py-3 rounded-xl shadow-lg hover:bg-gray-50 transition-all text-left min-w-[180px] border border-gray-100"
-          >
-            <p className="text-sm font-semibold text-gray-800">
-              Buat Penawaran
-            </p>
-          </button>
 
           {/* Option 1: General Chat */}
           <button
@@ -121,7 +106,7 @@ export function FloatingWhatsApp() {
             className="bg-white px-4 py-3 rounded-xl shadow-lg hover:bg-gray-50 transition-all text-left min-w-[180px] border border-gray-100"
           >
             <p className="text-sm font-semibold text-gray-800">
-              Chat dengan Kami
+              Konsultasi dengan Kami
             </p>
           </button>
         </div>

@@ -21,7 +21,7 @@ export function GaleriSection() {
     const fetchGalleries = async () => {
       try {
         const response = await galleryApi.getAll();
-        setGalleries(response.data || []);
+        setGalleries((response.data || []).slice(0, 12));
       } catch (error) {
         console.error("Error fetching galleries:", error);
       } finally {
@@ -46,7 +46,7 @@ export function GaleriSection() {
             </p>
           </div>
           <a
-            href="/galeri"
+            href="/gallery"
             className="hidden lg:inline-flex items-center gap-2 bg-[#EB216A] text-white px-6 py-3 rounded-full font-medium hover:bg-[#d11d5e] transition-colors"
           >
             Lihat koleksi
@@ -56,7 +56,7 @@ export function GaleriSection() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {loading
-            ? Array.from({ length: 8 }).map((_, i) => (
+            ? Array.from({ length: 12 }).map((_, i) => (
                 <div
                   key={i}
                   className="rounded-2xl overflow-hidden aspect-square bg-gray-200 animate-pulse"
