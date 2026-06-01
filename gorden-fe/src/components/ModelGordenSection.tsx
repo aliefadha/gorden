@@ -2,6 +2,9 @@ import { ArrowRight, Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { categoriesApi, productsApi } from "../utils/api";
 import { getProductImageUrl } from "../utils/imageHelper";
+import gordenPoniLayar from "../assets/brosur/gorden-poni-layar.jpeg";
+import gordenPoniSpanyol from "../assets/brosur/gorden-poni-spanyol.jpeg";
+import gordenBox from "../assets/brosur/gorden-box.jpeg";
 
 interface Product {
   id: number;
@@ -20,6 +23,33 @@ interface Category {
   id: number;
   name: string;
 }
+
+const STATIC_PRODUCTS = [
+  {
+    id: "static-1",
+    name: "Gorden Poni Layar",
+    image: gordenPoniLayar,
+    description: "Jenis tirai dengan potongan kain tambahan di bagian atas (poni) yang didesain menjuntai bergelombang menyerupai layar.",
+  },
+  {
+    id: "static-2",
+    name: "Gorden Poni Spanyol",
+    image: gordenPoniSpanyol,
+    description: "Jenis gorden klasik yang memiliki hiasan kain tambahan di bagian atas (poni) dengan desain potongan bergelombang anggun.",
+  },
+  {
+    id: "static-3",
+    name: "Gorden Box",
+    image: gordenBox,
+    description: "Gorden dengan cover box kayu/multiplek di bagian atas untuk menyembunyikan rel secara rapi dan estetis.",
+  },
+  {
+    id: "static-4",
+    name: "Gorden Box",
+    image: gordenBox,
+    description: "Gorden dengan cover box kayu/multiplek di bagian atas untuk menyembunyikan rel secara rapi dan estetis.",
+  }
+];
 
 export function ModelGordenSection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -66,42 +96,52 @@ export function ModelGordenSection() {
   }, [searchQuery]);
 
   const sliderRef = useRef<HTMLDivElement>(null);
+  const staticSliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
+    const setupDrag = (ref: React.RefObject<HTMLDivElement>) => {
+      const el = ref.current;
+      if (!el) return () => {};
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
 
-    const onMouseDown = (e: MouseEvent) => {
-      isDown = true;
-      startX = e.pageX - el.offsetLeft;
-      scrollLeft = el.scrollLeft;
-    };
-    const onMouseLeave = () => {
-      isDown = false;
-    };
-    const onMouseUp = () => {
-      isDown = false;
-    };
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - el.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      el.scrollLeft = scrollLeft - walk;
+      const onMouseDown = (e: MouseEvent) => {
+        isDown = true;
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+      };
+      const onMouseLeave = () => {
+        isDown = false;
+      };
+      const onMouseUp = () => {
+        isDown = false;
+      };
+      const onMouseMove = (e: MouseEvent) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        el.scrollLeft = scrollLeft - walk;
+      };
+
+      el.addEventListener("mousedown", onMouseDown);
+      el.addEventListener("mouseleave", onMouseLeave);
+      el.addEventListener("mouseup", onMouseUp);
+      el.addEventListener("mousemove", onMouseMove);
+      return () => {
+        el.removeEventListener("mousedown", onMouseDown);
+        el.removeEventListener("mouseleave", onMouseLeave);
+        el.removeEventListener("mouseup", onMouseUp);
+        el.removeEventListener("mousemove", onMouseMove);
+      };
     };
 
-    el.addEventListener("mousedown", onMouseDown);
-    el.addEventListener("mouseleave", onMouseLeave);
-    el.addEventListener("mouseup", onMouseUp);
-    el.addEventListener("mousemove", onMouseMove);
+    const cleanupDynamic = setupDrag(sliderRef);
+    const cleanupStatic = setupDrag(staticSliderRef);
     return () => {
-      el.removeEventListener("mousedown", onMouseDown);
-      el.removeEventListener("mouseleave", onMouseLeave);
-      el.removeEventListener("mouseup", onMouseUp);
-      el.removeEventListener("mousemove", onMouseMove);
+      cleanupDynamic();
+      cleanupStatic();
     };
   }, []);
 
@@ -169,6 +209,33 @@ export function ModelGordenSection() {
             Lihat koleksi
             <ArrowRight className="w-4 h-4" />
           </a>
+        </div>
+
+        {/* Static Model Slider */}
+        <div
+          ref={staticSliderRef}
+          className="flex overflow-x-auto gap-6 pb-8 mb-8 hide-scrollbar cursor-grab active:cursor-grabbing"
+        >
+          {STATIC_PRODUCTS.map((product) => (
+            <div
+              key={product.id}
+              className="bg-[#F5F5F5] p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 border border-gray-50"
+            >
+              <div className="bg-[#EB216A] text-white text-center py-2.5 rounded-xl font-medium text-sm md:text-base">
+                {product.name}
+              </div>
+              <div className="rounded-xl overflow-hidden aspect-square bg-gray-100">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-[#6B6B6B] text-sm leading-relaxed px-1">
+                {product.description}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Filters */}
@@ -276,7 +343,7 @@ export function ModelGordenSection() {
             ? [1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="bg-white p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0  border border-gray-50 animate-pulse"
+                  className="bg-white p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 border border-gray-50 animate-pulse"
                 >
                   <div className="bg-gray-200 h-8 rounded-xl" />
                   <div className="rounded-xl aspect-square bg-gray-200" />
@@ -289,7 +356,7 @@ export function ModelGordenSection() {
             : filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-[#F5F5F5] p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 bborder border-gray-50"
+                  className="bg-[#F5F5F5] p-3 md:p-4 rounded-3xl flex flex-col gap-4 min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] flex-shrink-0 border border-gray-50"
                 >
                   <div className="bg-[#EB216A] text-white text-center py-2.5 rounded-xl font-medium text-sm md:text-base">
                     {product.name}

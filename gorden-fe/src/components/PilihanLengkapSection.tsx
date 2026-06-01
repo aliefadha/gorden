@@ -12,7 +12,7 @@ const products = [
     id: "sp100b",
     code: "SP.100 B",
     name: "Blackout Fabric",
-    category: "Gorden",
+    category: "Blind",
     image: img1,
     swatchColors: [
       "#6A9BBB",
@@ -27,7 +27,7 @@ const products = [
     id: "sp111",
     code: "SP.111",
     name: "Dim Out",
-    category: "Gorden",
+    category: "Blind",
     image: img2,
     swatchColors: ["#3E231A", "#879185", "#EBE8D5"],
   },
@@ -35,7 +35,7 @@ const products = [
     id: "spvw8",
     code: "SP.VW8",
     name: "Solar Screen",
-    category: "Gorden",
+    category: "Blind",
     image: img3,
     swatchColors: ["#705937", "#211009", "#927D52", "#4A391B"],
   },
@@ -114,9 +114,26 @@ export function PilihanLengkapSection() {
   const [activeJenis, setActiveJenis] = useState("Semua");
   const [activeKategori, setActiveKategori] = useState("Semua Kategori");
   const [activeFungsi, setActiveFungsi] = useState("Semua Fungsi");
+  const [animationKey, setAnimationKey] = useState(0);
+
+  const handleJenisChange = (tab: string) => {
+    setActiveJenis(tab);
+    setAnimationKey((k) => k + 1);
+  };
+
+  const filteredProducts =
+    activeJenis === "Semua"
+      ? products
+      : products.filter((p) => p.category === activeJenis);
 
   return (
     <section className="flex flex-col max-w-7xl mx-auto w-full gap-6 py-12 lg:py-24 px-6 md:px-8">
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       {/* Header */}
       <div className="flex flex-col items-center text-center gap-2 mb-2">
         <p className="text-[#EB216A] text-base font-medium">Pilihan Lengkap</p>
@@ -153,7 +170,7 @@ export function PilihanLengkapSection() {
             {jenisTabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveJenis(tab)}
+                onClick={() => handleJenisChange(tab)}
                 className={`text-sm px-4 py-1.5 rounded-full font-medium border transition-all duration-200 ${
                   activeJenis === tab
                     ? "bg-[#EB216A] text-white border-[#EB216A]"
@@ -194,7 +211,7 @@ export function PilihanLengkapSection() {
             {jenisTabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveJenis(tab)}
+                onClick={() => handleJenisChange(tab)}
                 className={`px-4 py-1.5 rounded-full font-medium border transition-all duration-200 ${
                   activeJenis === tab
                     ? "bg-[#EB216A] text-white border-[#EB216A]"
@@ -231,8 +248,16 @@ export function PilihanLengkapSection() {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {filteredProducts.map((product, i) => (
+          <div
+            key={`${animationKey}-${product.id}`}
+            style={{
+              animation: "fadeSlideIn 0.35s ease both",
+              animationDelay: `${i * 60}ms`,
+            }}
+          >
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
 
